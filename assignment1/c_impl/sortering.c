@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 // QUICK SORT ALGORITHM
 
@@ -154,36 +157,86 @@ void print_array(int arr[], const int n) {
     printf("\n");
 }
 
+int* read_data(const char *filename, int *size) {
+    FILE *fp = fopen(filename, "r");
+    if (!fp) {
+        perror("Failed to open file");
+        return nullptr;
+    }
 
-int main(void) {
-    int arr[] = {10, 7, 8, 9, 1, 5};
-    constexpr int n = sizeof(arr) / sizeof(arr[0]);
-    quick_sort(arr, 0, n - 1);
-    printf("Sorted array: \n");
-    print_array(arr, n);
-    printf("\n");
+    int capacity = 1024;
+    int *arr = malloc(capacity * sizeof(int));
+    if (!arr) {
+        goto cleanup_file;
+    }
+    int n = 0;
 
-    printf("Testing merge sort:\n");
-    int arr2[] = {12, 11, 13, 5, 6, 7};
-    constexpr int m = sizeof(arr2) / sizeof(arr2[0]);
-    merge_sort(arr2, 0, m - 1);
-    printf("Sorted array: \n");
-    print_array(arr2, m);
-    printf("\n");
+    char line[64];
+    while (fgets(line, sizeof(line), fp) != nullptr) {
+        char *endptr;
+        const long val = strtol(line, &endptr, 10);
+        if (endptr == line) {
+            continue;  // No valid conversion
+        }
+        arr[n] = (int)val;
+        n++;
+        if (n >= capacity) {
+            capacity *= 2;
+            int *new_arr = realloc(arr, capacity * sizeof(int));
+            if (!new_arr) {
+                goto cleanup_all;
+            }
+            arr = new_arr;
+        }
+    }
+    fclose(fp);
+    *size = n;
+    return arr;
 
-    printf("Test insertion sort:\n");
-    int arr3[] = {12, 11, 13, 5, 6};
-    constexpr int k = sizeof(arr3) / sizeof(arr3[0]);
-    insertion_sort(arr3, k);
-    printf("Sorted array: \n");
-    print_array(arr3, k);
-    printf("\n");
+cleanup_all:
+    free(arr);
+cleanup_file:
+    fclose(fp);
+    return nullptr;
+}
 
-    printf("Test heap sort:\n");
-    int arr4[] = {12, 11, 13, 5, 6, 7};
-    constexpr int l = sizeof(arr4) / sizeof(arr4[0]);
-    heap_sort(arr4, l);
-    printf("Sorted array: \n");
-    print_array(arr4, l);
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        printf("Usage: %s <datafile> <algorithm>\n", argv[0]);
+        printf("Algorithms: quick, merge, insertion, heap\n");
+        return 1;
+    }
+
+    const char *filename = argv[1];
+    const char *algorithm = argv[2];
+
+    int size;
+    int *arr = read_data(filename, &size);
+    if (!arr) return 1;
+
+    const clock_t start = clock();
+
+    if (strcmp(algorithm, "quick") == 0) {
+        quick_sort(arr, 0, size - 1);
+    } else if (strcmp(algorithm, "merge") == 0) {
+        merge_sort(arr, 0, size - 1);
+    } else if (strcmp(algorithm, "insertion") == 0) {
+        insertion_sort(arr, size);
+    } else if (strcmp(algorithm, "heap") == 0) {
+        heap_sort(arr, size);
+    } else {
+        printf("Unknown algorithm: %s\n", algorithm);
+        free(arr);
+        return 1;
+    }
+
+    const clock_t end = clock();
+    const double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+
+    printf("Algorithm: %s\n", algorithm);
+    printf("Elements: %d\n", size);
+    printf("Time: %.6f seconds\n", time_spent);
+
+    free(arr);
     return 0;
 }
