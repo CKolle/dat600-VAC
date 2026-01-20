@@ -38,12 +38,17 @@ void merge(int arr[], const int left, const int mid, const int right) {
     const int n_left = mid - left + 1;
     const int n_right = right - mid;
 
-    int left_arr[n_left], right_arr[n_right];
+    int *left_arr = malloc(n_left * sizeof(int));
+    int *right_arr = malloc(n_right * sizeof(int));
+    if (!left_arr || !right_arr) {
+        goto cleanup;
+    }
+
     for (int i = 0; i < n_left; i++) {
         left_arr[i] = arr[left + i];
     }
     for (int i = 0; i < n_right; i++) {
-        right_arr[i] = arr[mid + i +1];
+        right_arr[i] = arr[mid + i + 1];
     }
 
     int i = 0, j = 0, k = left;
@@ -61,6 +66,9 @@ void merge(int arr[], const int left, const int mid, const int right) {
     while (j < n_right)
         arr[k++] = right_arr[j++];
 
+cleanup:
+    free(left_arr);
+    free(right_arr);
 }
 
 void merge_sort(int arr[], const int left, const int right) {
