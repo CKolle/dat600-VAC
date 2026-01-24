@@ -161,7 +161,7 @@ int* read_data(const char *filename, int *size) {
     FILE *fp = fopen(filename, "r");
     if (!fp) {
         perror("Failed to open file");
-        return NULL;
+        return nullptr;
     }
 
     int capacity = 1024;
@@ -172,7 +172,7 @@ int* read_data(const char *filename, int *size) {
     int n = 0;
 
     char line[64];
-    while (fgets(line, sizeof(line), fp) != NULL) {
+    while (fgets(line, sizeof(line), fp) != nullptr) {
         char *endptr;
         const long val = strtol(line, &endptr, 10);
         if (endptr == line) {
@@ -197,7 +197,7 @@ cleanup_all:
     free(arr);
 cleanup_file:
     fclose(fp);
-    return NULL;
+    return nullptr;
 }
 
 int main(int argc, char *argv[]) {
@@ -214,7 +214,8 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < 8; i++) {
             printf("Processing dataset: %s (n=%d)\n", datasets[i], sizes[i]);
             for (int j = 0; j < 4; j++) {
-                int size; int *arr = read_data(datasets[i], &size);
+                int size;
+                int *arr = read_data(datasets[i], &size);
                 if (!arr) continue;
                 printf("  Running %s_sort...", algos[j]);
                 clock_t start = clock();
