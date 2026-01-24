@@ -161,7 +161,7 @@ int* read_data(const char *filename, int *size) {
     FILE *fp = fopen(filename, "r");
     if (!fp) {
         perror("Failed to open file");
-        return nullptr;
+        return NULL;
     }
 
     int capacity = 1024;
@@ -172,7 +172,7 @@ int* read_data(const char *filename, int *size) {
     int n = 0;
 
     char line[64];
-    while (fgets(line, sizeof(line), fp) != nullptr) {
+    while (fgets(line, sizeof(line), fp) != NULL) {
         char *endptr;
         const long val = strtol(line, &endptr, 10);
         if (endptr == line) {
@@ -197,12 +197,45 @@ cleanup_all:
     free(arr);
 cleanup_file:
     fclose(fp);
-    return nullptr;
+    return NULL;
 }
 
 int main(int argc, char *argv[]) {
+    // Run all tests and save to results if no arguments provided
+    if (argc == 1) {
+        const char *datasets[] = {"../dataset/small/random_100.txt", "../dataset/small/random_500.txt", "../dataset/small/random_1000.txt", "../dataset/medium/random_5000.txt", "../dataset/medium/random_10000.txt", "../dataset/large/random_50000.txt", "../dataset/large/random_100000.txt", "../dataset/large/random_500000.txt"};
+        const int sizes[] = {100, 500, 1000, 5000, 10000, 50000, 100000, 500000};
+        const char *algos[] = {"insertion", "merge", "heap", "quick"};
+        
+        FILE *fp = fopen("../results/results_c.tsv", "w");
+        if (fp) { fprintf(fp, "algorithm\tn\ttime\n"); fclose(fp); }
+        
+        printf("Starting benchmark...\n");
+        for (int i = 0; i < 8; i++) {
+            printf("Processing dataset: %s (n=%d)\n", datasets[i], sizes[i]);
+            for (int j = 0; j < 4; j++) {
+                int size; int *arr = read_data(datasets[i], &size);
+                if (!arr) continue;
+                printf("  Running %s_sort...", algos[j]);
+                clock_t start = clock();
+                if (strcmp(algos[j], "insertion") == 0) insertion_sort(arr, size);
+                else if (strcmp(algos[j], "merge") == 0) merge_sort(arr, 0, size - 1);
+                else if (strcmp(algos[j], "heap") == 0) heap_sort(arr, size);
+                else if (strcmp(algos[j], "quick") == 0) quick_sort(arr, 0, size - 1);
+                double time_spent = (double)(clock() - start) / CLOCKS_PER_SEC;
+                printf(" Time: %.6f seconds\n", time_spent);
+                fp = fopen("../results/results_c.tsv", "a");
+                if (fp) { fprintf(fp, "%s\t%d\t%.6f\n", algos[j], size, time_spent); fclose(fp); }
+                free(arr);
+            }
+        }
+        printf("\nBenchmark complete!\nResults written to ../results/results_c.tsv\n");
+        return 0;
+    }
+    
     if (argc != 3) {
         printf("Usage: %s <datafile> <algorithm>\n", argv[0]);
+        printf("   OR: %s (no arguments to run all tests)\n", argv[0]);
         printf("Algorithms: quick, merge, insertion, heap\n");
         return 1;
     }
@@ -236,6 +269,13 @@ int main(int argc, char *argv[]) {
     printf("Algorithm: %s\n", algorithm);
     printf("Elements: %d\n", size);
     printf("Time: %.6f seconds\n", time_spent);
+
+    // Write to TSV file
+    FILE *fp = fopen("../results/results_c.tsv", "a");
+    if (fp) {
+        fprintf(fp, "%s\t%d\t%.6f\n", algorithm, size, time_spent);
+        fclose(fp);
+    }
 
     free(arr);
     return 0;
