@@ -65,7 +65,7 @@ def benchmark_sorting_algorithms():
     return results
 
 
-def write_results_to_tsv(results, filename='results.tsv'):
+def write_results_to_tsv(results, filename='../results/results.tsv'):
     """Write results to a TSV file."""
     with open(filename, 'w') as f:
         # Write header
@@ -75,7 +75,7 @@ def write_results_to_tsv(results, filename='results.tsv'):
         for result in results:
             f.write(f"{result['algorithm']}\t{result['n']}\t{result['time']:.6f}\n")
     
-    print(f"\nResults written to {filename}")
+    print(f"\nResults written to {os.path.abspath(filename)}")
 
 
 if __name__ == "__main__":
