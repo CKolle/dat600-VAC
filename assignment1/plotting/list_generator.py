@@ -6,12 +6,27 @@ def generate_random_numbers(filename, count, min_value=0, max_value=1000):
             f.write(f"{random.randint(min_value, max_value)}\n")
 
 if __name__ == "__main__":
+    # Small datasets
+    generate_random_numbers("../dataset/small/random_10.txt", 10, 0, 1000000)
+    generate_random_numbers("../dataset/small/random_25.txt", 25, 0, 1000000)
+    generate_random_numbers("../dataset/small/random_75.txt", 75, 0, 1000000)
     generate_random_numbers("../dataset/small/random_100.txt", 100, 0, 1000000)
+    generate_random_numbers("../dataset/small/random_250.txt", 250, 0, 1000000)
     generate_random_numbers("../dataset/small/random_500.txt", 500, 0, 1000000)
+    generate_random_numbers("../dataset/small/random_750.txt", 750, 0, 1000000)
     generate_random_numbers("../dataset/small/random_1000.txt", 1000, 0, 1000000)
+    
+    # Medium datasets
+    generate_random_numbers("../dataset/medium/random_2500.txt", 2500, 0, 1000000)
     generate_random_numbers("../dataset/medium/random_5000.txt", 5000, 0, 1000000)
+    generate_random_numbers("../dataset/medium/random_7500.txt", 7500, 0, 1000000)
     generate_random_numbers("../dataset/medium/random_10000.txt", 10000, 0, 1000000)
+    
+    # Large datasets
+    generate_random_numbers("../dataset/large/random_25000.txt", 25000, 0, 1000000)
     generate_random_numbers("../dataset/large/random_50000.txt", 50000, 0, 1000000)
+    generate_random_numbers("../dataset/large/random_75000.txt", 75000, 0, 1000000)
     generate_random_numbers("../dataset/large/random_100000.txt", 100000, 0, 1000000)
+    generate_random_numbers("../dataset/large/random_250000.txt", 250000, 0, 1000000)
     generate_random_numbers("../dataset/large/random_500000.txt", 500000, 0, 1000000)
     
