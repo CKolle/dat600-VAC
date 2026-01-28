@@ -1,5 +1,9 @@
 import random
-from assignment1.python_impl.heap_sort import heap_sort
+import sys
+import os
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from assignment1.python_impl.sortering import heap_sort
 
 def test_basic_cases():
     cases = [

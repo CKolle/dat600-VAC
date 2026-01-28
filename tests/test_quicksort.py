@@ -1,5 +1,9 @@
 import random
-from assignment1.python_impl.quick_sort import quick_sort
+import sys
+import os
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from assignment1.python_impl.sortering import quick_sort
 
 def test_basic_cases():
     cases = [
