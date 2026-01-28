@@ -203,15 +203,38 @@ cleanup_file:
 int main(int argc, char *argv[]) {
     // Run all tests and save to results if no arguments provided
     if (argc == 1) {
-        const char *datasets[] = {"../dataset/small/random_100.txt", "../dataset/small/random_500.txt", "../dataset/small/random_1000.txt", "../dataset/medium/random_5000.txt", "../dataset/medium/random_10000.txt", "../dataset/large/random_50000.txt", "../dataset/large/random_100000.txt", "../dataset/large/random_500000.txt"};
-        const int sizes[] = {100, 500, 1000, 5000, 10000, 50000, 100000, 500000};
+        const char *datasets[] = {
+            "../dataset/small/random_10.txt",
+            "../dataset/small/random_25.txt",
+            "../dataset/small/random_75.txt",
+            "../dataset/small/random_100.txt",
+            "../dataset/small/random_250.txt",
+            "../dataset/small/random_500.txt",
+            "../dataset/small/random_750.txt",
+            "../dataset/small/random_1000.txt",
+            "../dataset/medium/random_2500.txt",
+            "../dataset/medium/random_5000.txt",
+            "../dataset/medium/random_7500.txt",
+            "../dataset/medium/random_10000.txt",
+            "../dataset/large/random_25000.txt",
+            "../dataset/large/random_50000.txt",
+            "../dataset/large/random_75000.txt",
+            "../dataset/large/random_100000.txt",
+            "../dataset/large/random_250000.txt",
+            "../dataset/large/random_500000.txt"
+        };
+        const int sizes[] = {
+            10, 25, 75,100, 250, 500, 750, 1000,        // small
+            2500, 5000, 7500, 10000,         // medium
+            25000, 50000, 75000, 100000, 250000, 500000  // large
+        };
         const char *algos[] = {"insertion", "merge", "heap", "quick"};
         
         FILE *fp = fopen("../results/results_c.tsv", "w");
         if (fp) { fprintf(fp, "algorithm\tn\ttime\n"); fclose(fp); }
         
         printf("Starting benchmark...\n");
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 18; i++) {
             printf("Processing dataset: %s (n=%d)\n", datasets[i], sizes[i]);
             for (int j = 0; j < 4; j++) {
                 int size;
