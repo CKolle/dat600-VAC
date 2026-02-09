@@ -1,16 +1,14 @@
 //
-// Combined tests for all tasks
+// Created by christopher on 28.01.2026.
 //
 
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
-#include "task1/set.h"
-#include "task2/disjoint_set.h"
-#include "task3/fibonacci.h"
+#include "set.h"
+#include "fibonacci.h"
 
-// ============== Task 1: Set (AVL Tree) ==============
-
+// Helper to check tree height (basic validation)
 static int get_height(struct set *s, size_t idx) {
     if (idx == NULL_IDX) return 0;
     int lh = get_height(s, s->nodes[idx].left);
@@ -60,7 +58,7 @@ void test_insert_find() {
 void test_delete() {
     printf("Testing delete...\n");
     struct set *s = set_build(0, nullptr);
-
+    
     int keys[] = {10, 20, 30, 40, 50, 25};
     for (int i = 0; i < 6; i++) {
         set_insert(s, (struct set_element){keys[i], nullptr});
@@ -114,6 +112,7 @@ void test_duplicates() {
     int k;
     void *v;
     assert(set_find(s, 10, &k, &v) == true);
+    // In this implementation, duplicates are ignored in insert_node
     assert(strcmp((char*)v, "first") == 0);
 
     set_free(s);
@@ -147,67 +146,8 @@ void test_set_build() {
     assert(set_find(s, 40, nullptr, nullptr));
     assert_balanced(s, s->root);
     set_free(s);
-    printf("Passed!\n");
+    puts("Passed!\n");
 }
-
-// ============== Task 2: Disjoint Set ==============
-
-void test_make_and_find() {
-    printf("Testing make and find...\n");
-    struct disjoint_set *ds = disjoint_set_create(10);
-
-    for (size_t i = 0; i < 5; i++)
-        disjoint_set_make(ds, i);
-
-    for (size_t i = 0; i < 5; i++)
-        assert(disjoint_set_find(ds, i) == i);
-
-    disjoint_set_free(ds);
-    printf("Passed!\n");
-}
-
-void test_union() {
-    printf("Testing union...\n");
-    struct disjoint_set *ds = disjoint_set_create(10);
-
-    for (size_t i = 0; i < 6; i++)
-        disjoint_set_make(ds, i);
-
-    disjoint_set_union(ds, 0, 1);
-    assert(disjoint_set_find(ds, 0) == disjoint_set_find(ds, 1));
-
-    disjoint_set_union(ds, 2, 3);
-    assert(disjoint_set_find(ds, 2) == disjoint_set_find(ds, 3));
-
-    disjoint_set_union(ds, 0, 2);
-    assert(disjoint_set_find(ds, 0) == disjoint_set_find(ds, 3));
-
-    assert(disjoint_set_find(ds, 4) != disjoint_set_find(ds, 0));
-    assert(disjoint_set_find(ds, 4) != disjoint_set_find(ds, 5));
-
-    disjoint_set_free(ds);
-    printf("Passed!\n");
-}
-
-void test_path_compression() {
-    printf("Testing path compression...\n");
-    struct disjoint_set *ds = disjoint_set_create(100);
-
-    for (size_t i = 0; i < 100; i++)
-        disjoint_set_make(ds, i);
-
-    for (size_t i = 1; i < 100; i++)
-        disjoint_set_union(ds, 0, i);
-
-    size_t root = disjoint_set_find(ds, 99);
-    for (size_t i = 0; i < 100; i++)
-        assert(ds->parent[i] == root);
-
-    disjoint_set_free(ds);
-    printf("Passed!\n");
-}
-
-// ============== Task 3: Fibonacci ==============
 
 void test_fibonacci() {
 #define EXPECTED 12586269025UL
@@ -216,28 +156,17 @@ void test_fibonacci() {
     uint64_t fib_bu = fibonacci_bu(50);
     assert(fib_td == EXPECTED);
     assert(fib_bu == EXPECTED);
-    printf("Passed!\n");
+    puts("Passed!");
 }
 
-// ============== Main ==============
-
-int main(void) {
-    printf("=== Task 1: Set ===\n");
+int main() {
     test_insert_find();
     test_delete();
     test_min_max_prev_next();
     test_duplicates();
     test_large_insert();
     test_set_build();
-
-    printf("\n=== Task 2: Disjoint Set ===\n");
-    test_make_and_find();
-    test_union();
-    test_path_compression();
-
-    printf("\n=== Task 3: Fibonacci ===\n");
     test_fibonacci();
-
-    printf("\nAll tests passed!\n");
+    printf("All tests passed successfully!\n");
     return 0;
 }
