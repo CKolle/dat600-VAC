@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <string.h>
 #include "set.h"
+#include "fibonacci.h"
 
 // Helper to check tree height (basic validation)
 static int get_height(struct set *s, size_t idx) {
@@ -145,7 +146,17 @@ void test_set_build() {
     assert(set_find(s, 40, nullptr, nullptr));
     assert_balanced(s, s->root);
     set_free(s);
-    printf("Passed!\n");
+    puts("Passed!\n");
+}
+
+void test_fibonacci() {
+#define EXPECTED 12586269025UL
+    printf("Testing Fibonacci...\n");
+    uint64_t fib_td = fibonacci_td(50);
+    uint64_t fib_bu = fibonacci_bu(50);
+    assert(fib_td == EXPECTED);
+    assert(fib_bu == EXPECTED);
+    puts("Passed!");
 }
 
 int main() {
@@ -155,6 +166,7 @@ int main() {
     test_duplicates();
     test_large_insert();
     test_set_build();
+    test_fibonacci();
     printf("All tests passed successfully!\n");
     return 0;
 }
