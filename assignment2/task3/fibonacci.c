@@ -9,6 +9,12 @@
 
 static uint64_t *memo;
 
+uint64_t fibonacci_naive(const uint32_t n) {
+    if (n <= 1) return n;
+    if (n == 2) return 1;
+    return fibonacci_naive(n - 1) + fibonacci_naive(n - 2);
+}
+
 uint64_t fibonacci_td(const uint32_t n) {
     if (n <= 1) return n;
 

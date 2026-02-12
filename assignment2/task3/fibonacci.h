@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 
+uint64_t fibonacci_naive(uint32_t n);
 uint64_t fibonacci_td(uint32_t n);
 uint64_t fibonacci_bu(uint32_t n);
 

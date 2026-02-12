@@ -10,4 +10,4 @@ add_executable(all_tests tests.c
 )
 
 enable_testing()
-add_test(NAME AllTests COMMAND all_tests)
+add_test(NAME Tests COMMAND tests)
