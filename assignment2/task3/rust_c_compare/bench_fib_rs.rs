@@ -6,7 +6,7 @@ fn fibonacci_bu(n: u32) -> u64 {
         return n as u64;
     }
 
-    (2..n + 1).fold((0u64, 1u64), |(a, b), _| (b, a.wrapping_add(b))).1
+    (2..n + 1).fold((0u64, 1u64), |(a, b), _| (b, (a + b))).1
 }
 
 fn main() {
