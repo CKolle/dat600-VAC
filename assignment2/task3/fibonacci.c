@@ -46,13 +46,13 @@ uint64_t fibonacci_td(const uint32_t n) {
 uint64_t fibonacci_bu(const uint32_t n) {
     if (n <= 1) return n;
 
-    uint64_t *bu = calloc(n + 1, sizeof(uint64_t));
-    bu[1] = 1;
-    bu[2] = 1;
-    for (uint32_t i = 3; i <= n; i++) {
-        bu[i] = bu[i - 1] + bu[i - 2];
+    uint64_t a = 0;
+    uint64_t b = 1;
+
+    for (uint32_t i = 2; i <= n; i++) {
+        uint64_t next = a + b;
+        a = b;
+        b = next;
     }
-    const uint64_t result = bu[n];
-    free(bu);
-    return result;
+    return b;
 }
