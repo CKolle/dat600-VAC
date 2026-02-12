@@ -30,8 +30,8 @@ def fib_tabulation(n):
         table[i] = table[i-1] + table[i-2]
     return table[n]
 
-# 4. Greedy Approach
-def fib_greedy(n):
+# 4.  This is also bottom up
+def fib_bu2(n):
     if n <= 1: return n
     a, b = 0, 1
     for _ in range(2, n + 1):
@@ -49,7 +49,7 @@ n_values = range(0, 40, 2)  #
 times_naive = []
 times_memo = []
 times_tab = []
-times_greedy = []
+times_bu2 = []
 
 print(f"Calculating for n = {list(n_values)}...")
 
@@ -67,7 +67,7 @@ for n in n_values:
     times_tab.append(measure_time(fib_tabulation, n))
     
     # 4. Greedy
-    times_greedy.append(measure_time(fib_greedy, n))
+    times_bu2.append(measure_time(fib_bu2, n))
 
 
 plt.figure(figsize=(10, 6))
@@ -75,7 +75,7 @@ plt.figure(figsize=(10, 6))
 plt.plot(n_values, times_naive, label='Naive Recursive', marker='o')
 plt.plot(n_values, times_memo, label='Memoization', marker='o')
 plt.plot(n_values, times_tab, label='Tabulation', marker='o')
-plt.plot(n_values, times_greedy, label='Greedy', marker='o')
+plt.plot(n_values, times_bu2, label='Bottom up 2', marker='o')
 
 plt.title('Fibonacci Algorithm Performance')
 plt.xlabel('n (Fibonacci Term)')
