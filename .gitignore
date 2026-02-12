@@ -5,3 +5,5 @@ __pycache__/
 
 # C compiled binaries
 assignment1/c_impl/sortering
+assignment1/c_impl/build/
+assignment2/build/
