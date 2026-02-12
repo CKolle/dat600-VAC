@@ -9,5 +9,10 @@ add_executable(all_tests tests.c
         task3/fibonacci.c
 )
 
+add_executable(fibonacci_bench
+        task3/fibonacci_bench.c
+        task3/fibonacci.c
+)
+
 enable_testing()
 add_test(NAME Tests COMMAND tests)
